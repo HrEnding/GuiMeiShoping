@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.com.guimei.dao.SmallClassDao">
+    <resultMap id="resultSm" type="cn.com.guimei.pojo.Smallclass">
+        <id column="Sm_s_id" property="id"/>
+        <result column="Sm_s_name" property="smSName"/>
+        <result column="Sm_b_id" property="smBId"/>
+        <result column="Sm_text" property="smText"/>
+    </resultMap>
+    <resultMap id="resultSmExt" type="cn.com.guimei.pojo.SmallClassExt" extends="resultSm">
+        <association property="bigClass" javaType="cn.com.guimei.pojo.BigClass">
+            <id column="B_id" property="id"/>
+            <result column="B_name" property="bigName"/>
+            <result column="B_text" property="bigText"/>
+        </association>
+    </resultMap>
+
+    <select id="totalWhereRecode" parameterType="cn.com.guimei.pojo.Smallclass" resultType="java.lang.Integer">
+        select count(*) from smallclass
+        <where>
+            <if test="id!=null and id!=0">
+                and Sm_s_id=#{id}
+            </if>
+            <if test="smSName!=null and smSName!=''">
+                and Sm_s_name like concat('%',#{smSName},'%')
+            </if>
+            <if test="smBId!=null and smBId!=0">
+                and Sm_b_id=#{smBId}
+            </if>
+        </where>
+    </select>
+
+    <select id="showSmallclass" parameterType="map" resultMap="resultSmExt">
+        select * from smallclass s,bigclass b where b.B_id=s.Sm_b_id
+            <if test="sc.id!=null and sc.id!=0">
+                and Sm_s_id=#{sc.id}
+            </if>
+            <if test="sc.smSName!=null and sc.smSName!=''">
+                and Sm_s_name like concat('%',#{sc.smSName},'%')
+            </if>
+            <if test="sc.smBId!=null and sc.smBId!=0">
+                and Sm_b_id=#{sc.smBId}
+            </if>
+        limit #{pageIndex},#{pageSize};
+    </select>
+    <select id="updateById" parameterType="java.lang.Integer" resultMap="resultSmExt">
+        select * from smallclass s,bigclass b where s.Sm_b_id=b.B_id and s.Sm_s_id=#{id};
+    </select>
+
+    <select id="queryName" resultMap="resultSm">
+        select * from smallclass;
+    </select>
+
+    <update id="updateSmallclass" parameterType="cn.com.guimei.pojo.Smallclass">
+        update smallclass
+        <trim prefix="set" suffixOverrides=",">
+            <if test="smSName!=null and smSName!=''">
+                Sm_s_name = #{smSName},
+            </if>
+            <if test="smBId!=null and smBId!=0">
+                Sm_b_id = #{smBId},
+            </if>
+            <if test="smText!=null and smText!=''">
+                Sm_text = #{smText},
+            </if>
+        </trim>
+        <if test="id!=null and id!=0">
+            where Sm_s_id = #{id}
+        </if>
+    </update>
+
+    <delete id="deleteSmallclass" parameterType="int">
+        delete from smallclass where Sm_s_id = #{id}
+        and
+        not exists(select G_id from goods where G_Sm_id = #{id});
+    </delete>
+</mapper>

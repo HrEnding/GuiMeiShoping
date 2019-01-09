@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.com.guimei.dao.SellerDao">
+    <resultMap id="resultSe" type="cn.com.guimei.pojo.Seller">
+        <id column="Se_id" property="seId"/>
+        <result column="Se_name" property="seName"/>
+        <result column="Se_user" property="seUser"/>
+        <result column="Se_pwd" property="sePwd"/>
+        <result column="Se_sex" property="seSex"/>
+        <result column="Se_birth" property="seBirth"/>
+        <result column="Se_idcard" property="seIdcard"/>
+        <result column="Se_email" property="seEmail"/>
+        <result column="Se_tel" property="seTel"/>
+        <result column="Se_address" property="seAddress"/>
+    </resultMap>
+    <select id="login" resultMap="resultSe">
+        select * from seller where Se_user=#{userLoginName} and Se_pwd=#{userPassword};
+    </select>
+
+    <select id="totalWhereRecode" resultType="int" parameterType="cn.com.guimei.pojo.Seller">
+        select count(1) from seller
+        <where>
+            <if test="seId!=null and seId!=0">
+                and Se_id = #{seId}
+            </if>
+            <if test="seName!=null and seName!=''">
+                and Se_name like concat('%',#{seName},'%')
+            </if>
+            <if test="seSex!=null and seSex!='null' and seSex!=''">
+                and  Se_sex = #{seSex}
+            </if>
+        </where>
+    </select>
+
+    <select id="showSeller" parameterType="map" resultMap="resultSe">
+        select * from seller where 1=1
+        <if test="seller.seId!=null and seller.seId!=0">
+            and Se_id= #{seller.seId}
+        </if>
+        <if test="seller.seName!=null and seller.seName!=''">
+            and Se_name like concat('%',#{seller.seName},'%')
+        </if>
+        <if test="seller.seSex!=null and seller.seSex!='null' and seller.seSex!=''">
+            and  Se_sex = #{seller.seSex}
+        </if>
+        limit #{pageIndex},#{pageSize};
+    </select>
+    <select id="querryById" resultMap="resultSe">
+        select * from seller where Se_id=#{id};
+    </select>
+    <select id="querySe" resultMap="resultSe">
+        select * from seller;
+    </select>
+    <update id="sellerUpdate" parameterType="cn.com.guimei.pojo.Seller">
+        update seller set Se_name=#{seName},Se_user=#{seUser},Se_pwd=#{sePwd},Se_sex=#{seSex},
+        Se_idcard=#{seIdcard},Se_email=#{seEmail},Se_tel=#{seTel},Se_address=#{seAddress} where Se_id=#{seId};
+    </update>
+</mapper>

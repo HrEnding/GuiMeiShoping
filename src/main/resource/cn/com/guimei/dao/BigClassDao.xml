@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.com.guimei.dao.BigClassDao">
+    <resultMap id="resultBig" type="cn.com.guimei.pojo.BigClass">
+        <id column="B_id" property="id"/>
+        <result column="B_name" property="bigName"/>
+        <result column="B_text" property="bigText"/>
+    </resultMap>
+    <select id="queryBCName" resultMap="resultBig">
+        select * from bigclass;
+    </select>
+</mapper>

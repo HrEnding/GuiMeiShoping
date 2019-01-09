@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.com.guimei.dao.DiscountDao">
+    <resultMap id="resultDis" type="cn.com.guimei.pojo.Discount">
+        <id column="D_id" property="id"/>
+        <result property="dDisc" column="D_disc"/>
+    </resultMap>
+    <select id="querryDis" resultMap="resultDis">
+        select * from discount;
+    </select>
+</mapper>

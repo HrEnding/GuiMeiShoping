@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.com.guimei.dao.CustomerDao">
+    <resultMap id="resultCu" type="cn.com.guimei.pojo.Customer">
+        <id column="C_id" property="id"/>
+        <result column="C_name" property="cusName"/>
+        <result column="C_loginName" property="cusLoginName"/>
+        <result column="C_pwd" property="cusPassword"/>
+        <result column="C_email" property="cusEmail"/>
+        <result column="C_sex" property="cusSex"/>
+        <result column="C_photo" property="cusPhoto"/>
+        <result column="C_hobby" property="cusHobby"/>
+        <result column="C_code" property="cusCode"/>
+        <result column="C_birthday" property="cusBirthday"/>
+    </resultMap>
+
+    <select id="totalWhereRecode" resultType="int" parameterType="cn.com.guimei.pojo.Customer">
+        select count(1) from custom
+        <where>
+            <if test="id!=null and id!=0">
+                and C_id = #{id}
+            </if>
+            <if test="cusName!=null and cusName!=''">
+                and C_name like concat('%',#{cusName},'%')
+            </if>
+            <if test="cusSex!=null and cusSex!='null' and cusSex!=''">
+                and  C_sex = #{cusSex}
+            </if>
+        </where>
+    </select>
+
+    <select id="userWherePageList" parameterType="map" resultMap="resultCu">
+        select * from custom where 1=1
+        <if test="user.id!=null and user.id!=0">
+            and C_id= #{user.id}
+        </if>
+        <if test="user.cusName!=null and user.cusName!=''">
+            and C_name like concat('%',#{user.cusName},'%')
+        </if>
+        <if test="user.cusSex!=null and user.cusSex!='null' and user.cusSex!=''">
+            and  C_sex = #{user.cusSex}
+        </if>
+        limit #{pageIndex},#{pageSize};
+    </select>
+
+    <select id="queryById" resultMap="resultCu">
+        select * from custom where C_id=#{id};
+    </select>
+
+    <update id="custonUpdate" parameterType="cn.com.guimei.pojo.Customer">
+        update custom set C_loginName=#{cusLoginName},C_pwd=#{cusPassword},C_sex=#{cusSex},
+                          C_email=#{cusEmail},C_hobby=#{cusHobby},C_name=#{cusName} where C_id=#{id};
+    </update>
+
+    <delete id="customDelete">
+        delete from custom where C_id=#{id};
+    </delete>
+</mapper>

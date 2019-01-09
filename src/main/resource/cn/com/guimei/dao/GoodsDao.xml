@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.com.guimei.dao.GoodsDao">
+    <resultMap id="resultGo" type="cn.com.guimei.pojo.Goods">
+        <id column="G_id" property="id"/>
+        <result column="G_name" property="gName"/>
+        <result column="G_Sm_id" property="gSmId"/>
+        <result column="G_money" property="gMoney"/>
+        <result column="G_number" property="gNumber"/>
+        <result column="G_img" property="gImg"/>
+        <result column="G_carriage" property="gCarriage"/>
+        <result column="G_type" property="gType"/>
+        <result column="G_Se_id" property="gSeId"/>
+        <result column="G_d_id" property="gDId"/>
+    </resultMap>
+    <resultMap id="resultGoExt" type="cn.com.guimei.pojo.GoodsExt" extends="resultGo">
+        <association property="discount" javaType="cn.com.guimei.pojo.Discount">
+            <id column="D_id" property="id"/>
+            <result property="dDisc" column="D_disc"/>
+        </association>
+        <association property="seller" javaType="cn.com.guimei.pojo.Seller">
+            <id column="Se_id" property="seId"/>
+            <result column="Se_name" property="seName"/>
+        </association>
+        <association property="smallclass" javaType="cn.com.guimei.pojo.Smallclass">
+            <id column="Sm_s_id" property="id"/>
+            <result column="Sm_s_name" property="smSName"/>
+        </association>
+    </resultMap>
+    <select id="totalWhereRecode" parameterType="cn.com.guimei.pojo.Goods" resultType="java.lang.Integer">
+        select count(*) from goods
+        <where>
+            <if test="id!=null and id!=0">
+                and G_id=#{id}
+            </if>
+            <if test="gSmId!=null and gSmId>0">
+                and G_Sm_id=#{gSmId}
+            </if>
+            <if test="gSeId!=null and gSeId>0">
+                and G_Se_id=#{gSeId}
+            </if>
+        </where>
+    </select>
+    <select id="showGoods" resultMap="resultGoExt" parameterType="map">
+        select * from smallclass sm,goods g,discount d,seller se where g.G_d_id=d.D_id and g.G_Se_id=se.Se_id and g.G_Sm_id=Sm_s_id
+        <if test="goods.id!=null and goods.id!=0">
+            and G_id=#{goods.id}
+        </if>
+        <if test="goods.gSmId!=null and goods.gSmId>0">
+            and G_Sm_id=#{goods.gSmId}
+        </if>
+        <if test="goods.gSeId!=null and goods.gSeId>0">
+            and G_Se_id=#{goods.gSeId}
+        </if>
+        limit #{pageIndex},#{pageSize};
+    </select>
+    <select id="updateById" parameterType="java.lang.Integer" resultMap="resultGo">
+         select * from smallclass sm,goods g,discount d,seller se where g.G_d_id=d.D_id and g.G_Se_id=se.Se_id and g.G_Sm_id=Sm_s_id and g.G_id=#{id};
+    </select>
+    <select id="queryGoodsName" parameterType="cn.com.guimei.pojo.Goods" resultType="java.lang.Integer">
+        select count(1) from goods where G_name=#{gName} and G_Se_id=#{gSeId} and G_Sm_id=#{gSmId};
+    </select>
+    <update id="updateGoods" parameterType="cn.com.guimei.pojo.Goods">
+        update goods
+        <trim prefix="set" suffixOverrides=",">
+            <if test="gName!=null and gName!=''">
+                G_name = #{gName},
+            </if>
+            <if test="gSmId!=null and gSmId!=0">
+                G_Sm_id = #{gSmId},
+            </if>
+            <if test="gMoney!=null and gMoney>=0">
+                G_money = #{gMoney},
+            </if>
+            <if test="gNumber!=null and gNumber>=0">
+                G_number = #{gNumber},
+            </if>
+            <if test="gCarriage!=null and gCarriage>=0">
+                G_carriage = #{gCarriage},
+            </if>
+            <if test="gSeId!=null and gSeId>0">
+                G_Se_id = #{gSeId},
+            </if>
+            <if test="gImg!=null and gImg!=''">
+                G_img = #{gImg},
+            </if>
+            <if test="gDId!=null and gDId>0">
+                G_d_id = #{gDId},
+            </if>
+            <if test="gType!=null and gType>0">
+                G_type = #{gType},
+            </if>
+        </trim>
+        <if test="id!=null and id!=0">
+            where G_id = #{id}
+        </if>
+    </update>
+    <delete id="deleteGoods" parameterType="java.lang.Integer">
+        delete from goods where G_id = #{id}
+    </delete>
+    <insert id="add" parameterType="cn.com.guimei.pojo.Goods">
+        insert into goods (G_name,G_Sm_id,G_money,G_number,G_img,G_carriage,G_type,G_Se_id,G_d_id) value
+        (#{gName},#{gSmId},#{gMoney},#{gNumber},#{gImg},#{gCarriage},#{gType},#{gSeId},#{gDId});
+    </insert>
+</mapper>

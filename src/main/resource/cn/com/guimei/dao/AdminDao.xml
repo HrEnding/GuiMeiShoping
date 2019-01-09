@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.com.guimei.dao.AdminDao">
+    <resultMap id="resultSu" type="cn.com.guimei.pojo.Superuser">
+        <id column="Su_id" property="suId"/>
+        <result column="Su_user" property="suUser"/>
+        <result column="Su_pwd" property="suPwd"/>
+    </resultMap>
+    <select id="login" resultMap="resultSu">
+        select * from superuser where Su_user=#{userLoginName} and Su_pwd=#{userPassword};
+    </select>
+    <select id="showInfo" resultMap="resultSu">
+        select * from superuser where Su_id=#{id};
+    </select>
+</mapper>
