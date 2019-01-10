@@ -12,7 +12,7 @@ public interface SmallClassService {
 
     SmallClassExt updateById(int id);
 
-    List<Smallclass>queryName();
+    List<Smallclass>queryName(String smBId);
 
     boolean smallClassUpdateById(Smallclass smallclass);
 

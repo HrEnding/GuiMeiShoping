@@ -43,8 +43,9 @@ public class SmallClassServiceImpl implements SmallClassService {
         return smallClassDao.updateById(id);
     }
 
-    public List<Smallclass> queryName() {
-        return smallClassDao.queryName();
+    public List<Smallclass> queryName(String smBId) {
+        int id = smBId!=null && smBId.length()>0?Integer.parseInt(smBId):0;
+        return smallClassDao.queryName(id);
     }
 
     public boolean smallClassUpdateById(Smallclass smallclass) {

@@ -21,14 +21,29 @@
                 open("smallClass/delById?smallId="+id,"iframe_context");
             }
         }
-        <%--if(${not empty error}){--%>
-            <%--alert("${error}")--%>
-        <%--}--%>
+        $(function () {
+            $.post("/smallClass/queryBName",function (date) {
+                for (var i = 0; i < date.length; i++) {
+                    $("select[name='smBId']").append("<option value=\""+date[i].id+"\">"+date[i].bigName+"</option>");
+                }
+            });
+        });
+
     </script>
 </head>
 <body>
 <h3 style="color: #0000FF">${error}</h3>
-<%@include file="unionForm.jsp"%>
+<form action="/smallClass/query" method="post">
+    <label>学号:</label>
+    <input type="text" name="id" placeholder="请输入学号" />
+    <label>小分类名称:</label>
+    <input type="text" name="smSName" placeholder="请输入姓名"  />
+    <label>大分类名称:</label>
+    <select name="smBId">
+        <option value="">请选择</option>
+    </select>
+    <input class="layui-btn " type="submit"  value="查询"/>
+</form>
 <c:choose>
     <c:when test="${not empty Page.pageData}">
         ${error}

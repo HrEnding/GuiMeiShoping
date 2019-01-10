@@ -15,7 +15,7 @@ public interface SmallClassDao {
 
     SmallClassExt updateById(int id);
 
-    List<Smallclass>queryName();
+    List<Smallclass>queryName(@Param("smBid") int smBid);
 
     int updateSmallclass(Smallclass smallclass);
 

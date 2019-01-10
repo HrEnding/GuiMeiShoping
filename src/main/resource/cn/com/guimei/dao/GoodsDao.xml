@@ -35,8 +35,14 @@
             <if test="id!=null and id!=0">
                 and G_id=#{id}
             </if>
+            <if test="gName!=null and gName!=''">
+                and G_name=#{gName}
+            </if>
             <if test="gSmId!=null and gSmId>0">
                 and G_Sm_id=#{gSmId}
+            </if>
+            <if test="gType!=null">
+                and G_type=#{gType}
             </if>
             <if test="gSeId!=null and gSeId>0">
                 and G_Se_id=#{gSeId}
@@ -48,8 +54,14 @@
         <if test="goods.id!=null and goods.id!=0">
             and G_id=#{goods.id}
         </if>
+        <if test="goods.gName!=null and goods.gName!=''">
+            and G_name=#{goods.gName}
+        </if>
         <if test="goods.gSmId!=null and goods.gSmId>0">
             and G_Sm_id=#{goods.gSmId}
+        </if>
+        <if test="goods.gType!=null">
+            and G_type=#{goods.gType}
         </if>
         <if test="goods.gSeId!=null and goods.gSeId>0">
             and G_Se_id=#{goods.gSeId}

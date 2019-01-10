@@ -21,11 +21,78 @@
                 open("goods/delById?goodsId="+id,"iframe_context");
             }
         }
+        $(function () {
+            var url1 = "/smallClass/querySmName";
+            $.getJSON(url1,function(smallClass){
+                $.each(smallClass,function (index,sm) {
+                    $("select[name='gSmId']").append("<option value='"+sm.id+"'>"+sm.smSName+"</option>");
+                });
+            });
+            var url2 = "/seller/querySe";
+            $.getJSON(url2,function(seller){
+                $.each(seller,function (index,se) {
+                    $("select[name='gSeId']").append("<option value='"+se.seId+"'>"+se.seName+"</option>");
+                });
+            });
+            $.post("/smallClass/queryBName",function (date) {
+                for (var i = 0; i < date.length; i++) {
+                    $("select[name='smBId']").append("<option value=\""+date[i].id+"\">"+date[i].bigName+"</option>");
+                }
+            });
+        })
+        $(function () {
+            $("#smBId").change(function () {
+                var bigClassId = $(this).val();
+                if(bigClassId>0){
+                    var url = "/smallClass/querySmName?smBId="+bigClassId;
+                    $.getJSON(url,function (smallClassList) {
+                        //清空原来小分类列表中的数据信息
+                        $("select[name='gSmId']").empty();
+                        $.each(smallClassList,function (index,smallClass) {
+                            $("select[name='gSmId']").append("<option value='"+smallClass.id+"'>"+smallClass.smSName+"</option>");
+                        });
+                    });
+                } else {
+                    var url = "/smallClass/querySmName";
+                    $.getJSON(url,function (smallClassList) {
+                        //清空原来小分类列表中的数据信息
+                        $("select[name='gSmId']").empty();
+                        $("select[name='gSmId']").append(" <option value=\"0\">-请选择-</option>");
+                        $.each(smallClassList,function (index,smallClass) {
+                            $("select[name='gSmId']").append("<option value='"+smallClass.id+"'>"+smallClass.smSName+"</option>");
+                        });
+                    });
+                }
+            })
+        })
     </script>
 </head>
 <body>
 <h3 style="color: #0000FF">${error}</h3>
-<%@include file="unionForm.jsp"%>
+<form action="/goods/union" method="post">
+    <label>商品编号:</label>
+    <input type="text" name="id" placeholder="请输入商品ID" />
+    <label>商品名称:</label>
+    <input type="text" name="gName" placeholder="请输入商品名称"  />
+    <label>所属商家:</label>
+    <select name="gSeId">
+        <option value="0">请选择</option>
+    </select>
+    <label>商品类型</label>
+    <select name="gType">
+        <option value="0">新品</option>
+        <option value="1">二手</option>
+    </select>
+    <label>商品所属大分类</label>
+    <select id="smBId" name="smBId">
+        <option value="0">-请选择-</option>
+    </select>
+    <label>商品所属小分类类型</label>
+    <select name="gSmId">
+        <option value="0">-请选择-</option>
+    </select>
+    <input class="layui-btn " type="submit"  value="查询"/>
+</form>
 <c:choose>
     <c:when test="${not empty Page.pageData}">
         ${error}
@@ -57,7 +124,7 @@
                     <td>${goods.smallclass.smSName}</td>
                     <td>${goods.seller.seName}</td>
                     <td><img src="static/images/goodsImage/${goods.gImg}"></td>
-                    <td>${goods.discount.dDisc}</td>
+                    <td>${goods.discount.dDisc*10}折</td>
                     <td><a class="layui-btn layui-btn-sm" onclick="del(${goods.id})">删除</a></td>
                     <td><a class="layui-btn layui-btn-sm" href="/goods/updateById?id=${goods.id}">修改</a></td>
 

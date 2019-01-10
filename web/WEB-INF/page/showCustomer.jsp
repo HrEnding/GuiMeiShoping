@@ -16,7 +16,19 @@
 </head>
 <body>
 <h3 style="color: #0000FF">${error}</h3>
-    <%@include file="unionForm.jsp"%>
+<form action="/custom/union" method="post">
+    <label>编号:</label>
+    <input type="text" name="id" placeholder="请输入编号" />
+    <label>姓名:</label>
+    <input type="text" name="cusName" placeholder="请输入姓名"  />
+    <label>性别:</label>
+    <select name="cusSex">
+        <option value="">请选择</option>
+        <option value="男">男</option>
+        <option value="女">女</option>
+    </select>
+    <input class="layui-btn " type="submit"  value="查询"/>
+</form>
     <c:choose>
         <c:when test="${not empty Page.pageData}">
             ${error}

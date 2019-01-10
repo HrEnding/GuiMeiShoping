@@ -59,7 +59,7 @@ public class SmallClassController {
     @RequestMapping(value = "/queryName",produces = "text/json;charset=utf-8")
     @ResponseBody
     public String queryName(String smallClassName){
-        List<Smallclass>list = smallClassService.queryName();
+        List<Smallclass>list = smallClassService.queryName(null);
         for (Smallclass sm: list) {
             if (sm.getSmSName().equals(smallClassName)){
                 return JSONArray.toJSONString("exists");
@@ -69,8 +69,8 @@ public class SmallClassController {
     }
     @RequestMapping(value = "/querySmName",produces = "text/json;charset=utf-8")
     @ResponseBody
-    public String querySmName(){
-        List<Smallclass>list = smallClassService.queryName();
+    public String querySmName(String smBId){
+        List<Smallclass>list = smallClassService.queryName(smBId);
         return JSONArray.toJSONString(list);
     }
     @RequestMapping("/updateSmallClass")

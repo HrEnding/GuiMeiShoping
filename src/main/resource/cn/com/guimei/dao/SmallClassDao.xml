@@ -49,8 +49,13 @@
         select * from smallclass s,bigclass b where s.Sm_b_id=b.B_id and s.Sm_s_id=#{id};
     </select>
 
-    <select id="queryName" resultMap="resultSm">
-        select * from smallclass;
+    <select id="queryName" parameterType="java.lang.Integer" resultMap="resultSm">
+        select * from smallclass
+        <where>
+            <if test="smBid!=null and smBid>0">
+                Sm_b_id = #{smBid}
+            </if>
+        </where>
     </select>
 
     <update id="updateSmallclass" parameterType="cn.com.guimei.pojo.Smallclass">
